@@ -59,7 +59,9 @@ def generate_import_statements(component_path, component_js):
 
 
 def copy_components_path(components_path: str | os.PathLike):
-    shutil.copytree(components_path, get_path("./svelte_app/components"))
+    if os.path.exists(get_path("svelte_app/components")):
+        shutil.rmtree(get_path("svelte_app/components"))
+    shutil.copytree(components_path, get_path("svelte_app/components"))
 
 
 def get_components_js(components_path: str | os.PathLike, extra_packages: list | None = None) -> str:
@@ -67,15 +69,31 @@ def get_components_js(components_path: str | os.PathLike, extra_packages: list |
     copy_components_path(components_path)
     # set env variables
 
-    generate_import_statements(get_path("./svelte_app/components"),
-                               get_path("./svelte_app/components.js"))
+    generate_import_statements(get_path("svelte_app/components"),
+                               get_path("svelte_app/components.js"))
 
     npm_install_extra(extra_packages)
     res = build_components_js()
-    print(len(res))
     return res
+
+
+class Bundle:
+    def __init__(self, components: dict[str, str | os.PathLike], extra_packages: list | None = None):
+        self.components = components
+        self.extra_packages = extra_packages
+        self.bundled = {}
+        self.build()
+
+    def build(self):
+        for component_name, component_path in self.components.items():
+            self.bundled[component_name] = get_components_js(component_path, self.extra_packages)
+
+    def __getitem__(self, item):
+        return self.bundled[item]
 
 
 if __name__ == "__main__":
     # generate_import_statements("/home/panos/Downloads/comp", "/home/panos/Downloads/comp/components.js")
-    get_components_js("/home/panos/Downloads/comp", ["moment"])
+
+    b = Bundle({"comp": "/home/panos/Downloads/comp"}, ["moment"])
+    print(b["comp"])
