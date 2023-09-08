@@ -83,5 +83,5 @@ In your html file, import the js bundle:
 
 This will take care of loading the js bundle asynchronously and only once.
 
-For more details see the [Bundle](/bundle) and [FastAPI integration](/fastapi_integration) pages.
+For more details see the [Bundle](/svelte_web_components/bundle) and [FastAPI integration](/svelte_web_components/fastapi_integration) pages.
 
