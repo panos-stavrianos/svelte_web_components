@@ -1,2 +1,2 @@
-from .bundle import get_components_js
-
+from .bundle import Bundle
+from .sveltefiles import SvelteFiles
