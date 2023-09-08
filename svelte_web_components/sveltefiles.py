@@ -119,3 +119,7 @@ try:
             return {"content_length": content_length, "last_modified": last_modified, "etag": etag}
 except ImportError:
     print("ImportError: you need to install fastapi and starlette in order to use SvelteFiles")
+
+
+    class SvelteFiles:
+        pass
