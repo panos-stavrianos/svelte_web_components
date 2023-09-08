@@ -6,6 +6,9 @@ from setuptools import setup, find_packages
 
 from svelte_web_components.setup_node import setup_node
 
+with open('requirements.txt') as requirements_file:
+    requirements = requirements_file.readlines()
+
 readme = pathlib.Path('README.md').read_text()
 
 setup(
@@ -15,6 +18,7 @@ setup(
     description="Svelte web components for python",
     long_description=readme,
     long_description_content_type='text/markdown',
+    install_requires=requirements,
     setup_requires=[
         'requests',
     ],
