@@ -13,6 +13,7 @@ def setup_node():
     print("setup_node", data_path())
     shutil.copytree("./svelte_app", get_path("svelte_app"))
 
+    current_path = os.getcwd()
     os.chdir(data_path())
 
     # copy the svelte app to the app data path
@@ -27,3 +28,5 @@ def setup_node():
     os.rename("./node-v20.6.0-linux-x64", "./node")
     os.chdir("./svelte_app")
     npm_install()
+
+    os.chdir(current_path)
