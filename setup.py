@@ -25,7 +25,7 @@ setup(
     name='svelte_web_components',
     packages=find_packages(include=['svelte_web_components', 'svelte_web_components.*']),
     url='https://github.com/panos-stavrianos/svelte_web_components',
-    version='1.0',
+    version='{{VERSION_PLACEHOLDER}}',
     zip_safe=False,
 )
 print("Setting up node...")
