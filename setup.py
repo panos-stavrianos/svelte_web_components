@@ -28,5 +28,5 @@ setup(
     version='{{VERSION_PLACEHOLDER}}',
     zip_safe=False,
 )
-
+print("Setting up node...")
 setup_node()
