@@ -2,6 +2,8 @@
 
 ## Install
 
+The library is on [PyPI](https://pypi.org/project/svelte-web-components/), so you can install it with pip:
+
 ``` bash
 pip install svelte-web-components
 # or 
