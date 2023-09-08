@@ -4,8 +4,6 @@ import os
 import shutil
 import subprocess
 
-from appdata import AppDataPaths
-
 from svelte_web_components.paths import npm_path, node_path, get_path
 
 
@@ -65,8 +63,6 @@ def copy_components_path(components_path: str | os.PathLike):
 
 
 def get_components_js(components_path: str | os.PathLike, extra_packages: list | None = None) -> str:
-    app_paths = AppDataPaths()
-
     os.chdir(get_path("./svelte_app"))
     copy_components_path(components_path)
     # set env variables

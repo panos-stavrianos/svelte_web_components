@@ -1,25 +1,18 @@
 import os
 import shutil
+from pathlib import Path
 
-from appdata import AppDataPaths
-
-project_name = "svelte_web_components"
-
-app_paths = AppDataPaths()
+project_name = ".svelte_web_components"
 
 
 def paths_init():
-    app_paths.setup()
-
     if os.path.exists(data_path()):
         shutil.rmtree(data_path())
     os.mkdir(data_path())
 
 
 def data_path():
-    app_paths.setup()
-    data_path = os.path.join(app_paths.app_data_path, project_name)
-    return data_path
+    return os.path.join(str(Path.home()), project_name)
 
 
 def get_path(path):
