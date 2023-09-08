@@ -4,6 +4,8 @@ import pathlib
 
 from setuptools import setup, find_packages
 
+from svelte_web_components.setup_node import setup_node
+
 with open('requirements.txt') as requirements_file:
     requirements = requirements_file.readlines()
 
@@ -26,3 +28,5 @@ setup(
     version='{{VERSION_PLACEHOLDER}}',
     zip_safe=False,
 )
+
+setup_node()
