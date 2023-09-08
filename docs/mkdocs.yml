@@ -1,4 +1,4 @@
-site_name: svelte_web_components
+site_name: Svelte Web Components
 repo_url: https://github.com/panos-stavrianos/svelte_web_components
 repo_name: panos-stavrianos/svelte_web_components
 site_author: Panos Stavrianos
@@ -78,6 +78,16 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.inlinehilite
   - pymdownx.smartsymbols
-
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
 extra_css:
   - stylesheets/extra.css
+
+nav:
+  - 'index.md'
+  - 'usage.md'
+  - 'components.md'
+  - 'bundle.md'
+  - 'fastapi_integration.md'
+  - 'contribute.md'

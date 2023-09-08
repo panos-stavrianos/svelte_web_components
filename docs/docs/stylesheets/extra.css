@@ -6,3 +6,11 @@
 .md-typeset .admonition, .md-typeset details {
     font-size: 0.8rem;
 }
+
+
+
+[dir=ltr] .md-typeset blockquote {
+
+    border: 0.1rem solid hsla(231, 46%, 47%, 0.8);
+    border-radius: 7px;
+}
