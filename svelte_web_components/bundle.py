@@ -65,6 +65,7 @@ def copy_components_path(components_path: str | os.PathLike):
 
 
 def get_components_js(components_path: str | os.PathLike, extra_packages: list | None = None) -> str:
+    current_path = os.getcwd()
     os.chdir(get_path("./svelte_app"))
     copy_components_path(components_path)
     # set env variables
@@ -74,6 +75,7 @@ def get_components_js(components_path: str | os.PathLike, extra_packages: list |
 
     npm_install_extra(extra_packages)
     res = build_components_js()
+    os.chdir(current_path)
     return res
 
 
