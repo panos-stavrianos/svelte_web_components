@@ -7,6 +7,7 @@ from urllib.parse import quote
 from svelte_web_components.bundle import Bundle
 
 try:
+
     from fastapi import FastAPI
     from starlette._compat import md5_hexdigest
     from starlette.datastructures import Headers
