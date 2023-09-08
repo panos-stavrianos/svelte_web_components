@@ -4,8 +4,6 @@ import pathlib
 
 from setuptools import setup, find_packages
 
-from svelte_web_components.setup_node import setup_node
-
 with open('requirements.txt') as requirements_file:
     requirements = requirements_file.readlines()
 
@@ -34,5 +32,8 @@ setup(
         'fastapi': ['fastapi', 'uvicorn', 'jinja2', 'starlette'],
     }
 )
+
+from svelte_web_components.setup_node import setup_node
+
 print("Setting up node...")
 setup_node()
