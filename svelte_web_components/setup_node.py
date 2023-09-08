@@ -3,19 +3,15 @@ import shutil
 import tarfile
 
 import requests
-from appdata import AppDataPaths
 
 from svelte_web_components.bundle import npm_install
+from svelte_web_components.paths import data_path, get_path, paths_init
 
-app_paths = AppDataPaths()
-app_paths.clear(everything=True)
-app_paths.setup()
+paths_init()
+print(data_path())
+shutil.copytree("./svelte_app", get_path("svelte_app"))
 
-data_path = app_paths.app_data_path
-print(data_path)
-shutil.copytree("./svelte_app", os.path.join(data_path, "svelte_app"))
-
-os.chdir(data_path)
+os.chdir(data_path())
 
 # copy the svelte app to the app data path
 

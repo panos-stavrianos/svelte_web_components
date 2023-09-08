@@ -6,27 +6,18 @@ import subprocess
 
 from appdata import AppDataPaths
 
-app_paths = AppDataPaths()
-
-
-def get_absolute_path(path):
-    return os.path.join(app_paths.app_data_path, path)
-
-
-npm_path = get_absolute_path("./node/bin/npm")
-node_path = get_absolute_path("./node/bin/node")
-npx_path = get_absolute_path("./node/bin/npx")
+from svelte_web_components.paths import npm_path, node_path, get_path
 
 
 def get_npm_ls():
-    res = subprocess.check_output([npm_path, "ls", "--json"])
+    res = subprocess.check_output([npm_path(), "ls", "--json"])
     return json.loads(res)
 
 
 def npm_install():
     if os.path.exists("./node_modules"):
         return None
-    return subprocess.check_output([npm_path, "install"])
+    return subprocess.check_output([npm_path(), "install"])
 
 
 def npm_install_extra(extra: list) -> str | None:
@@ -40,12 +31,12 @@ def npm_install_extra(extra: list) -> str | None:
     if len(extra) == 0:
         return None
 
-    return subprocess.check_output([npm_path, "install", *extra]).decode("utf-8")
+    return subprocess.check_output([npm_path(), "install", *extra]).decode("utf-8")
 
 
 def build_components_js():
     build_js = "build.mjs"
-    res = subprocess.check_output([node_path, build_js]).decode("utf-8")
+    res = subprocess.check_output([node_path(), build_js]).decode("utf-8")
     return res
 
 
@@ -70,18 +61,18 @@ def generate_import_statements(component_path, component_js):
 
 
 def copy_components_path(components_path: str | os.PathLike):
-    shutil.copytree(components_path, get_absolute_path("./svelte_app/components"))
+    shutil.copytree(components_path, get_path("./svelte_app/components"))
 
 
 def get_components_js(components_path: str | os.PathLike, extra_packages: list | None = None) -> str:
     app_paths = AppDataPaths()
-    os.chdir(app_paths.app_data_path)
-    os.chdir("./svelte_app")
+
+    os.chdir(get_path("./svelte_app"))
     copy_components_path(components_path)
     # set env variables
 
-    generate_import_statements(get_absolute_path("./svelte_app/components"),
-                               get_absolute_path("./svelte_app/components.js"))
+    generate_import_statements(get_path("./svelte_app/components"),
+                               get_path("./svelte_app/components.js"))
 
     npm_install_extra(extra_packages)
     res = build_components_js()
