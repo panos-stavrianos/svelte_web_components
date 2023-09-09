@@ -1,0 +1,12 @@
+import svelteRetag from "svelte-retag";
+{% for package in packages  %}
+import {{ package["name"] }} from './components/{{ package["path"] }}'; {% endfor %}
+{% for package in packages  %}
+svelteRetag({
+    component: {{ package["name"] }},
+    tagname: '{{ package["tag"] }}',
+    shadow: false,
+});
+{% endfor %}
+
+

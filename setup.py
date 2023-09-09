@@ -18,7 +18,7 @@ setup(
     long_description_content_type='text/markdown',
     install_requires=requirements,
     setup_requires=[
-        'requests',
+        'requests', 'Jinja2'
     ],
     license="MIT license",
     include_package_data=True,

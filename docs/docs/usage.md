@@ -14,10 +14,9 @@ pip install "svelte_web_components[fastapi]"
 
 Create a folder to store your components, for example `assets/components`.
 
-In there create a file `my_component.svelte` for your component:
+In there create a file `MyComponent.svelte` for your component:
 
-``` html title="Svelte"
-<svelte:options customElement="my_component"/>
+``` html title="MyComponent.svelte"
 <script>
   export let name = 'World';
 </script>
@@ -42,6 +41,8 @@ bundle = Bundle({
 
 js_bundle = bundle["components"]
 ```
+
+Now you can use the `js_bundle` to write it in your html file, or save it in a file and serve it with your framework.
 
 ### Use the component
 

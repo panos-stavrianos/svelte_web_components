@@ -3,6 +3,17 @@ import json
 import os
 import shutil
 import subprocess
+from re import sub
+
+from jinja2 import FileSystemLoader, Environment
+
+
+def kebab(s):
+    return '-'.join(
+        sub(r"(\s|_|-)+", " ",
+            sub(r"[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+",
+                lambda mo: ' ' + mo.group(0).lower(), s)).split())
+
 
 from svelte_web_components.paths import npm_path, node_path, get_path
 
@@ -38,7 +49,7 @@ def build_components_js():
     return res
 
 
-def generate_import_statements(component_path, component_js):
+def generate_import_statements2(component_path, component_js):
     import_statements = []
     export_statements = []
     for svelte_file in glob.glob(os.path.join(component_path, '**/*.svelte'), recursive=True):
@@ -56,6 +67,29 @@ def generate_import_statements(component_path, component_js):
 
     with open(component_js, 'w') as js_file:
         js_file.write(import_statements + export_statement)
+
+
+def generate_import_statements(component_path, component_js):
+    packages = []
+
+    for svelte_file in glob.glob(os.path.join(component_path, '**/*.svelte'), recursive=True):
+        relative_path = os.path.relpath(svelte_file, component_path)
+        component_name = os.path.splitext(os.path.basename(svelte_file))[0]
+
+        package = {
+            "name": component_name,
+            "path": relative_path,
+            "tag": kebab(component_name)
+        }
+        packages.append(package)
+    print(component_js)
+    environment = Environment(loader=FileSystemLoader(get_path("svelte_app")))
+    template = environment.get_template("main.js.jinja2")
+    rendered = template.render(packages=packages)
+    print(rendered)
+
+    with open(component_js, 'w+') as js_file:
+        js_file.write(rendered)
 
 
 def copy_components_path(components_path: str | os.PathLike):
@@ -96,7 +130,11 @@ class Bundle:
 
 
 if __name__ == "__main__":
-    # generate_import_statements("/home/panos/Downloads/comp", "/home/panos/Downloads/comp/components.js")
+    # overwrite the contents of the svelte_app folder
+    shutil.copytree("./svelte_app", get_path("svelte_app"), dirs_exist_ok=True)
 
-    b = Bundle({"comp": "/home/panos/Downloads/comp"}, ["moment"])
-    print(b["comp"])
+    generate_import_statements("/home/panos/WebstormProjects/svelte_test/src/components",
+                               "/home/panos/WebstormProjects/svelte_test/src/components.js")
+    #
+    # b = Bundle({"comp": "/home/panos/Downloads/comp"}, ["moment"])
+    # print(b["comp"])
