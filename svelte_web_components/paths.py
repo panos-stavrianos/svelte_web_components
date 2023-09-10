@@ -17,7 +17,7 @@ def data_path():
 
 
 def lib_path(path):
-    p = pathlib.Path(__file__).parent.parent.resolve()
+    p = pathlib.Path(__file__).parent.resolve()
     return os.path.join(p, path)
 
 
