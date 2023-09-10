@@ -25,7 +25,6 @@ setup(
     keywords=['svelte', 'web components', 'python', 'fastapi', 'flask'],
     name='svelte_web_components',
     packages=find_packages(include=['svelte_web_components', 'svelte_web_components.*']),
-    package_dir={"": "svelte_web_components"},
     url='https://github.com/panos-stavrianos/svelte_web_components',
     version='{{VERSION_PLACEHOLDER}}',
     zip_safe=False,
