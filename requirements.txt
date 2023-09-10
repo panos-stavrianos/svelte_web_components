@@ -3,4 +3,4 @@ Jinja2
 setuptools
 click
 fastapi
-starlette
+starlette==0.31.1
