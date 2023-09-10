@@ -86,11 +86,9 @@ def generate_import_statements(component_path, component_js):
             "tag": kebab(component_name)
         }
         packages.append(package)
-    print(component_js)
     environment = Environment(loader=FileSystemLoader(get_path("svelte_app")))
     template = environment.get_template("main.js.jinja2")
     rendered = template.render(packages=packages)
-    print(rendered)
 
     with open(component_js, 'w+') as js_file:
         js_file.write(rendered)
