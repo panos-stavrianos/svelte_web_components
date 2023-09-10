@@ -3,9 +3,13 @@ import json
 import os
 import shutil
 import subprocess
+import time
 from re import sub
+import filecmp
 
 from jinja2 import FileSystemLoader, Environment
+
+from svelte_web_components.setup_node import setup_node
 
 
 def kebab(s):
@@ -119,6 +123,7 @@ class Bundle:
         self.components = components
         self.extra_packages = extra_packages
         self.bundled = {}
+        setup_node()
         self.build()
 
     def build(self):
@@ -130,11 +135,16 @@ class Bundle:
 
 
 if __name__ == "__main__":
-    # overwrite the contents of the svelte_app folder
-    shutil.copytree("./svelte_app", get_path("svelte_app"), dirs_exist_ok=True)
-
-    generate_import_statements("/home/panos/WebstormProjects/svelte_test/src/components",
-                               "/home/panos/WebstormProjects/svelte_test/src/components.js")
+    # # overwrite the contents of the svelte_app folder
+    # shutil.copytree("./svelte_app", get_path("svelte_app"), dirs_exist_ok=True)
+    #
+    # generate_import_statements("/home/panos/WebstormProjects/svelte_test/src/components",
+    #                            "/home/panos/WebstormProjects/svelte_test/src/components.js")
     #
     # b = Bundle({"comp": "/home/panos/Downloads/comp"}, ["moment"])
     # print(b["comp"])
+    shutil.copytree("/home/panos/Downloads/comp", get_path("svelte_app/components"), dirs_exist_ok=True)
+    for i in range(100):
+        s_time = time.time()
+        print(filecmp.dircmp("/home/panos/Downloads/comp", get_path("svelte_app/components")).diff_files)
+        print((time.time() - s_time) * 1000, "ms")

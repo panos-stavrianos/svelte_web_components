@@ -30,10 +30,9 @@ setup(
     zip_safe=False,
     extras_require={
         'fastapi': ['fastapi', 'uvicorn', 'jinja2', 'starlette'],
-    }
+    },
+    entry_points='''
+   [console_scripts]
+   svelte_wc=svelte_web_components.cli:init
+   ''',
 )
-
-from svelte_web_components.setup_node import setup_node
-
-print("Setting up node...")
-setup_node()

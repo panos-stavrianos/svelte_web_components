@@ -1,4 +1,5 @@
 import os
+import pathlib
 import shutil
 from pathlib import Path
 
@@ -13,6 +14,11 @@ def paths_init():
 
 def data_path():
     return os.path.join(str(Path.home()), project_name)
+
+
+def lib_path(path):
+    p = pathlib.Path(__file__).parent.parent.resolve()
+    return os.path.join(p, path)
 
 
 def get_path(path):
