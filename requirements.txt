@@ -2,5 +2,3 @@ requests
 Jinja2
 setuptools
 click
-fastapi
-starlette==0.31.1
