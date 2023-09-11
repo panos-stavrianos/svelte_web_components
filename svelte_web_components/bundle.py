@@ -49,8 +49,7 @@ def npm_install_extra(extra: list) -> str | None:
 
 def build_components_js():
     build_js = "build.mjs"
-    res = subprocess.check_output([node_path(), build_js]).decode("utf-8")
-    return res
+    return subprocess.check_output([node_path(), build_js]).decode("utf-8")
 
 
 def generate_import_statements2(component_path, component_js):

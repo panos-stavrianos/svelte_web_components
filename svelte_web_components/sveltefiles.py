@@ -59,7 +59,7 @@ class SvelteFiles:
     def __init__(self, components: dict[str, str | os.PathLike], extra_packages: list | None = None,
                  app: FastAPI = None,
                  templates=None):
-        self.bundler = Bundle(components)
+        self.bundler = Bundle(components, extra_packages)
         self.extra_packages = extra_packages
         self.last_modified = datetime.now()
 

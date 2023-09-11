@@ -3,8 +3,10 @@ import {svelte} from "@sveltejs/vite-plugin-svelte";
 
 
 export default defineConfig({
-    mode: 'production', plugins: [svelte({
-        include: [`./components/**/*.svelte`], compilerOptions: {
+    mode: 'production',
+    plugins: [svelte({
+        include: [`./**/*.svelte`],
+        compilerOptions: {
             customElement: true,
         },
     }),],
