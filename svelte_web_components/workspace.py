@@ -9,6 +9,7 @@ from re import sub
 
 import requests
 import sh
+from dirhash import dirhash
 from jinja2 import Environment, FileSystemLoader
 from sh import mkdir, mv, cp, rm
 
@@ -143,6 +144,12 @@ class Workspace:
 
         with open(os.path.join(self.projects_path, name, "components.js"), 'w+') as js_file:
             js_file.write(rendered)
+
+    def components_directory_hash(self, name) -> str | None:
+        components_path = os.path.join(self.projects_path, name, "components")
+        if os.path.exists(components_path):
+            return dirhash(components_path, "md5")
+        return None
 
     def need_build(self, name):
         dist_version = os.path.join(self.projects_path, name, "dist/version.txt")

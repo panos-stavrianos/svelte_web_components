@@ -1,0 +1,20 @@
+[
+  {
+    "name": "p1",
+    "components": "components/c1",
+    "extra_packages": {
+      "moment": "*",
+      "opt": "^3.3"
+    },
+    "watch": true
+  },
+  {
+    "name": "p2",
+    "components": "components/c1",
+    "extra_packages": {
+      "moment": "*",
+      "opt": "^3.3"
+    },
+    "watch": true
+  }
+]
