@@ -2,3 +2,6 @@ requests
 Jinja2
 setuptools
 click
+sh
+rich
+watchfiles
