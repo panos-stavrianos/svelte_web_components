@@ -26,7 +26,7 @@ setup(
     name='svelte_web_components',
     packages=find_packages(include=['svelte_web_components', 'svelte_web_components.*']),
     url='https://github.com/panos-stavrianos/svelte_web_components',
-    # version='{{VERSION_PLACEHOLDER}}',
+    version='{{VERSION_PLACEHOLDER}}',
     zip_safe=False,
     extras_require={
         'fastapi': ['fastapi', 'uvicorn', 'jinja2', 'starlette'],
