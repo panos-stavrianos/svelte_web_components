@@ -65,6 +65,13 @@ class Config(BaseModel):
             print(f"In {self.name}: Compiler url is not required when compiler is {self.compiler}, it will be ignored")
             self.compiler_url = None
 
+        if self.output:
+            # make it absolute
+            self.output = os.path.abspath(self.output)
+        if self.components:
+            # make it absolute
+            self.components = os.path.abspath(self.components)
+
     def model_post_init(self, __context) -> None:
         if not self.extra_packages:
             self.extra_packages = {}
