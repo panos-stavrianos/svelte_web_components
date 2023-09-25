@@ -37,7 +37,7 @@ class Workspace:
     data_path = os.path.join(home_path, library_name)
     workspace_path = os.path.join(home_path, library_name, "workspace")
     projects_path = os.path.join(home_path, library_name, "workspace/projects")
-    node_url = "https://nodejs.org/dist/v20.6.0/node-v20.6.0-linux-x64.tar.xz"
+    node_url = "https://nodejs.org/dist/v20.7.0/node-v20.7.0-linux-x64.tar.xz"
 
     node = None
     npx = None
@@ -62,7 +62,7 @@ class Workspace:
             tarobj.extractall()
 
         # rename the extracted folder to 'node'
-        mv("./node-v20.6.0-linux-x64", "./node")
+        mv("./node-v20.7.0-linux-x64", "./node")
         self.init_commands()
 
     def ls(self) -> list[str]:
