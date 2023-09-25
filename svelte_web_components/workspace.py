@@ -176,11 +176,11 @@ class Workspace:
                     return True
         return False
 
-    def build(self, name, extra_packages=None):
-        extra_packages = self.parse_extra_packages(extra_packages)
+    def build(self, name, extra_packages=None, output_path=None):
         extra_packages_changed = self.did_extra_packages_change(name, extra_packages)
         if not self.need_build(name) and not extra_packages_changed:
             print("No need to build")
+            self.copy_to_output(name, output_path)
             return
         if extra_packages_changed:
             self.add_extra_packages(name, extra_packages)
@@ -198,6 +198,12 @@ class Workspace:
             dist_file.write(current_version)
             components_file.write(current_version)
 
+    def copy_to_output(self, name, output_path=None):
+        if output_path:
+            with sh.pushd(self.projects_path):
+                mkdir("-p", output_path)
+                cp(self.components_js_path(name), os.path.join(output_path, f"{name}.js"))
+
     def components_js_path(self, name):
         return os.path.join(self.projects_path, name, "dist/components.js")
 
@@ -205,17 +211,7 @@ class Workspace:
         with open(self.components_js_path(name)) as js_file:
             return js_file.read()
 
-    def parse_extra_packages(self, extra_packages: str | list[str] | dict[str, str] | None):
-        if not extra_packages:
-            extra_packages = {}
-        if isinstance(extra_packages, str):
-            extra_packages = [extra_packages]
-        if isinstance(extra_packages, list):
-            extra_packages = {package: "*" for package in extra_packages}
-        return extra_packages
-
     def add_extra_packages(self, name: str, extra_packages: str | list[str] | dict[str, str] | None):
-        extra_packages = self.parse_extra_packages(extra_packages)
         with open(os.path.join(self.projects_path, name, "package.json")) as package_file:
             package_json = json.load(package_file)
             if "dependencies" not in package_json:
@@ -229,3 +225,11 @@ class Workspace:
 
         with sh.pushd(self.workspace_path):
             print(self.yarn_workspace(name, "install"))
+
+    def clean(self):
+        # TODO: clean
+        pass
+
+    def remote_build(self, config: dict):
+        # TODO: remote build
+        pass

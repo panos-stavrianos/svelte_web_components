@@ -1,55 +1,31 @@
 import asyncio
-import configparser
 import os
 import signal
 import threading
+from typing import Optional
 
-from watchfiles import awatch, watch
+import watchfiles
 
 from svelte_web_components import Workspace
-
-
-def is_async():
-    try:
-        asyncio.get_running_loop()
-        return True
-    except RuntimeError:
-        return False
+from svelte_web_components.models import Config, CompilerEnum, OutputModeEnum
+from svelte_web_components.tools import is_async
 
 
 class Bundle:
-    def __init__(self, name: str,
-                 components: str | os.PathLike = "",
-                 extra_packages: str | list[str] | dict[str, str] | None = None,
-                 config_file="swc.config",
-                 watch: bool = False):
-        if config_file and os.path.exists(config_file):
-
-            config = configparser.ConfigParser()
-            if not config.read(config_file):
-                raise ValueError(f"Config file {config_file} not found")
-            config.read(config_file)
-            if name in config:
-                components = config[name].get('components', components)
-
-                extra_packages = config[name].get('extra_packages', extra_packages)  # todo: fix this
-                watch = config[name].getboolean('watch', watch)
-
-        self.name = name
-        self.components_path = components
-        self.extra_packages = extra_packages
-
-        self.watch = watch
-        if not self.components_path:
-            raise ValueError("Components path not specified")
-        if not os.path.exists(self.components_path):
-            raise ValueError(f"Components path {self.components_path} does not exist")
-        if not os.path.isdir(self.components_path):
-            raise ValueError(f"Components path {self.components_path} is not a directory")
-
+    def __init__(self, config: str | os.PathLike | list[dict] | dict | Config | None = None,
+                 environment: Optional[str] = None):
+        self.environment = environment
+        self.config = Config.load(config, environment=environment)
+        self.workspace = Workspace()
+        self.watch_thread: threading.Thread | None = None
+        self.watch_stop_event: threading.Event | None = None
         self.workspace = Workspace()
         self.full_build()
-        if self.watch:
+
+        self.init_watch()
+
+    def init_watch(self):
+        if self.config.watch:
             if is_async():
                 asyncio.create_task(self.watch_async())
             else:
@@ -61,31 +37,42 @@ class Bundle:
                 self.watch_thread.start()
 
     def full_build(self):
-        self.workspace.setup_workspace()
-        self.workspace.add_project(self.name)
-        self.workspace.set_components(self.name, self.components_path)
-        self.workspace.build(self.name, self.extra_packages)
+        if self.config.compiler == CompilerEnum.remote:
+            self.workspace.remote_build(self.config.model_dump())
+        else:
+            self.workspace.setup_workspace()
+            self.workspace.add_project(self.config.name)
+            self.workspace.set_components(self.config.name, self.config.components)
+            self.workspace.build(self.config.name, self.config.extra_packages, output_path=self.config.output)
+            if self.config.compiler == CompilerEnum.local_temporary:
+                self.workspace.clean()
 
     def components_js_path(self):
-        return self.workspace.components_js_path(self.name)
+        if self.config.output_mode == OutputModeEnum.local_path:
+            return self.config.output
+        return self.workspace.components_js_path(self.config.name)
 
     def components_js(self):
-        return self.workspace.components_js(self.name)
+        return self.workspace.components_js(self.config.name)
 
     async def watch_async(self):
-        async for _ in awatch(self.components_path):
+        async for _ in watchfiles.awatch(self.config.components):
             self.full_build()
 
     def watch_threaded(self):
-        for _ in watch(self.components_path, stop_event=self.watch_stop_event):
+        for _ in watchfiles.watch(self.config.components, stop_event=self.watch_stop_event):
             self.full_build()
 
     def stop_watch(self, *args):
-        if self.watch and not is_async():
+        if self.config.watch and not is_async():
             self.watch_stop_event.set()
 
 
 if __name__ == '__main__':
-    b = Bundle("test",
-               components="/mnt/Inner Space/Projects/PycharmProjects/KeyCloud/app/templates/components",
-               extra_packages="svelte-multiselect")
+    b = Bundle(
+        Config(name="testmy",
+               components="/home/panos/Downloads/comp",
+               output_mode=OutputModeEnum.local_path,
+               output="/home/panos/Downloads/comp_dist",
+               ))
+    print(b.components_js_path())

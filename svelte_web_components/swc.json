@@ -6,7 +6,9 @@
       "moment": "*",
       "opt": "^3.3"
     },
-    "watch": true
+    "watch": true,
+    "output_mode": "local_path",
+    "environment": "development"
   },
   {
     "name": "p2",
