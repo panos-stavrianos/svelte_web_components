@@ -197,12 +197,14 @@ class Workspace:
         with open(dist_version, 'w+') as dist_file, open(components_version, 'w+') as components_file:
             dist_file.write(current_version)
             components_file.write(current_version)
+        self.copy_to_output(name, output_path)
 
     def copy_to_output(self, name, output_path=None):
         if output_path:
             with sh.pushd(self.projects_path):
                 mkdir("-p", output_path)
                 cp(self.components_js_path(name), os.path.join(output_path, f"{name}.js"))
+                print(f"copied {name} to {output_path}")
 
     def components_js_path(self, name):
         return os.path.join(self.projects_path, name, "dist/components.js")
